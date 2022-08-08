@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 const quizzesSlice = createSlice({
     name: 'quizzes',
@@ -10,16 +10,20 @@ const quizzesSlice = createSlice({
     reducers: {
         // { id: '123', name: 'quiz name', topicId: '456', cardIds: ['1', '2', '3', ...]}
         addQuiz: (state, action) => {
-            const { id } = action.payload
-            state.quizzes[id] = action.payload
+            const { id, name, topicId, cardIds } = action.payload
+            state.quizzes[id] = {
+                id: id,
+                name: name,
+                topicId: topicId,
+                cardIds: cardIds
+            }
         }
     }
 })
-export const addLinkQuiz = (quiz) => {
+export const createNewQuiz = (quiz) => {
     const { id, topicId } = quiz;
     return (dispatch) => {
-        console.log(quiz)
-        dispatch({ type: 'quizzes/addQuiz', payload: quiz });
+        dispatch(addQuiz(quiz));
         dispatch({
             type: 'topics/addQuizToTopic', payload: {
                 quizId: id,

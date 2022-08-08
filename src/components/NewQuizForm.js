@@ -4,7 +4,8 @@ import { useHistory } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import ROUTES from "../app/routes";
 import { selectTopics } from "../features/topics/topicsSlice";
-import { addLinkQuiz } from "../features/quizzes/quizzesSlice";
+import { createNewQuiz } from "../features/quizzes/quizzesSlice";
+import { addCard } from "../features/cards/cardSlice";
 
 export default function NewQuizForm() {
   const [name, setName] = useState("");
@@ -23,9 +24,19 @@ export default function NewQuizForm() {
     const cardIds = [];
 
     // create the new cards here and add each card's id to cardIds
+    // { id: '123', front: 'front of card', back: 'back of card'}
+    cards.map(card => {
+      const id = uuidv4()
+      cardIds.push(id)
+      dispatch(addCard({
+        id: id,
+        front: card.front,
+        back: card.back
+      }))
+    })
     // create the new quiz here
     // { id: '123', name: 'quiz name', topicId: '456', cardIds: ['1', '2', '3', ...]}
-    dispatch(addLinkQuiz({
+    dispatch(createNewQuiz({
       id: uuidv4(),
       name: name,
       topicId: topicId,
